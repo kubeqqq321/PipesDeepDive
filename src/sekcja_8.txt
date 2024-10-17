@@ -1,0 +1,86 @@
+Czym są Pipes w Angularze?
+
+Pipes to mechanizm, który pozwala na transformację danych w Angularze.
+Pipes są używane w szablonach, aby zmienić sposób wyświetlania danych.
+Angular dostarcza kilka wbudowanych pipe'ów, takich jak
+DatePipe, UpperCasePipe, LowerCasePipe, CurrencyPipe, DecimalPipe itp.
+Możesz również tworzyć własne rury w Angularze.
+
+Pipes -> są czymś do można dodawać do szablonó w celu przekształcenia na inny sposób wyświetlania danych
+         na ekranie lub sposób formatowania i wyświetlania danych
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+        <p>{{ currentDate | date: 'medium' }}</p>
+W taki sposób jak powyżej przekazujemy wartość konfiguracyjną do pipe'a ('medium')
+następnie pipe ten przekształca wartość currentDate na format daty w formacie 'medium'
+app.component.html
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+@Pipe({
+  name: 'temperature-pipe', -> nazwa dla pipe'a, używana w szablonie (musi być)
+  standalone: true,
+})
+export class TemperaturePipe {
+  transform(){} -> wszytskie pipe'y muszą posiadać metodę transform, która jest wykonywana automatycznie przez Angulara
+                   gdy ten pipe zostanie użyty w szablonie, a wartość tego pipe'a zostanie przekazy jako argument do tej metody
+
+}
+
+export class TemperaturePipe implements PipeTransform -> zmusza do dodania metody transform
+  transform(value: any, ...args: any[]): any {
+    return null;
+  }
+temperatura.pipe.ts
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+{{ temperature  | temperaturePipe }} -> pierwszy argument to wartość, która zostanie przekazana do pipe'a czyli to
+                                        co znajduje się po lewej stronie od pipe'a
+                                        drugi argument to nazwa pipe'a, która jest używana w szablonie
+
+app.component.html
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+    <p>New York: {{ currentTemperaturs.newYork | temperaturePipe:'C':'F'  | number: '1.1-2' }}</p>
+Pipe'y można łączyć, a więc wynik jednego pipe'a można przekazać jako argument do drugiego pipe'a.
+Nalezy pamiętać jednak, aby warości pipe'ów miały odpowiednie typy danych
+
+app.component.html
+------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------
+@Pipe({
+  name: 'sort',
+  standalone: true,
+  pure: false
+})
+
+pure -> domyślnie jest ustawione na true, co oznacza, że pipe jest czysty, a więc nie zmienia wartości, która jest przekazywana
+        do niego jako argument, a jedynie ją przekształca. Jeżeli ustawimy na false, to pipe nie będzie czysty, a więc będzie
+        mógł zmieniać wartość, która jest przekazywana do niego jako argument
+
+
+
+
